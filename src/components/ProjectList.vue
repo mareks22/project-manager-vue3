@@ -6,7 +6,6 @@ import { useProjectStore } from '@/store/projects'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-//const { stringSortAscending } = useSortService()
 const projectStore = useProjectStore()
 
 const isFiltered = ref('ID')
