@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/projects'
 import { useRouter } from 'vue-router'
+import ProjectFilter from './ProjectFilter.vue'
 
 const router = useRouter()
 const projectStore = useProjectStore()
@@ -11,7 +12,7 @@ const projectStore = useProjectStore()
 const isFiltered = ref('ID')
 const reverseSort = ref(false)
 
-const { projects } = storeToRefs(projectStore)
+const { filteredProjects } = storeToRefs(projectStore)
 const {
   getProjects,
   removeProject,
@@ -35,7 +36,7 @@ function onDelete(id: string | number) {
   removeProject(id)
 }
 
-function onFilter(filterBy: string) {
+function onSort(filterBy: string) {
   isFiltered.value = filterBy
   reverseSort.value = !reverseSort.value
 
@@ -53,7 +54,7 @@ function onFilter(filterBy: string) {
       sortProjectsByDate('dateDue', reverseSort.value)
       break
     case 'Source Language':
-    sortProjectsByString('sourceLanguage', reverseSort.value)
+      sortProjectsByString('sourceLanguage', reverseSort.value)
       break
     case 'Created':
       sortProjectsByDate('dateCreated', reverseSort.value)
@@ -61,17 +62,23 @@ function onFilter(filterBy: string) {
   }
 }
 
-const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Date due', 'Created', '', '']
+const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Target Language', 'Date due', 'Created', '', '']
+const fullSpan = computed(() => {
+  return `grid-column: span ${titleArray.length}`
+})
 </script>
 
 <template>
   <div class="grid-container">
+    <div :style="fullSpan" class="grid-container__filters grid-container__header">
+      <ProjectFilter />
+    </div>
     <div
-      @click="onFilter(title)"
+      @click="onSort(title)"
       v-for="(title, index) in titleArray"
       :class="{ filteredBy: isFiltered === title }"
       :key="index"
-      class="grid-header clickable"
+      class="grid-container__header clickable"
     >
       {{ title }}
       <font-awesome-icon
@@ -81,11 +88,12 @@ const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Date due', 'Crea
       />
     </div>
 
-    <div v-for="project in projects" :key="project.id" class="wrapper">
+    <div v-for="project in filteredProjects" :key="project.id" class="wrapper">
       <div class="grid-item">{{ project.id }}</div>
       <div class="grid-item">{{ project.name }}</div>
       <div class="grid-item">{{ project.status }}</div>
       <div class="grid-item">{{ project.sourceLanguage }}</div>
+      <div class="grid-item">{{ project.targetLanguages.join(', ') }}</div>
       <div class="grid-item">{{ new Date(project.dateDue).toLocaleDateString() }}</div>
       <div class="grid-item">{{ new Date(project.dateCreated).toLocaleDateString() }}</div>
       <div class="grid-item">
@@ -103,6 +111,8 @@ const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Date due', 'Crea
         />
       </div>
     </div>
+
+    <div :style="fullSpan" v-if="filteredProjects.length == 0" class="info">No projects found.</div>
   </div>
 
   <!-- <table class="projects-table">
@@ -144,27 +154,45 @@ const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Date due', 'Crea
       </td>
     </tr>
   </table> -->
-  <RouterLink to="/add-project"><button class="btn btn-primary">Add Project</button></RouterLink>
+  <div class="footer">
+    <RouterLink to="/add-project"><button class="btn btn-primary">Add Project</button></RouterLink>
+  </div>
 </template>
 
 <style scoped lang="scss">
+
+$column-full-span: span 9;
 .grid-container {
   display: grid;
-  grid-template-columns: minmax(75px, auto) repeat(5, 1fr) minmax(50px, auto) minmax(50px, auto);
+  grid-template-columns: minmax(75px, auto) repeat(6, 1fr) minmax(50px, auto) minmax(50px, auto);
   grid-auto-rows: minmax(40px, auto);
   gap: 0;
   align-items: center;
-  justify-items: center;
+  justify-items: end;
+
+  &__header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(77, 77, 77);
+    height: 100%;
+    user-select: none;
+  }
+
+  &__filters {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    height: 60px;
+    background-color: rgb(77, 77, 77);
+  }
 }
 
-.grid-header {
-  width: 100%;
+.footer {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(77, 77, 77);
-  height: 100%;
-  user-select: none;
+  width: 100%;
+  justify-content: end;
 }
 
 .grid-item {
@@ -183,6 +211,14 @@ const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Date due', 'Crea
 
 .wrapper:hover > div {
   background-color: rgb(49, 49, 49);
+}
+
+.info {
+  font-size:24px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin: 24px auto;
 }
 
 // .projects-list {

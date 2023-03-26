@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 
 import { useHttpService } from '@/service/httpService'
-import type { Project } from '@/model'
+import type { Project, ProjectStatus } from '@/model'
 
 const { fetchProjects, deleteProject, addProject, editProject } = useHttpService()
 
 export const useProjectStore = defineStore('projects', {
   state: () => ({
-    projects: [] as Project[]
+    projects: [] as Project[],
+    searchQuery: '',
+    selectedStatus: '' as ProjectStatus | '',
   }),
   actions: {
     getProjects() {
@@ -46,5 +48,18 @@ export const useProjectStore = defineStore('projects', {
           : new Date(a[key]).getTime() - new Date(b[key]).getTime()
       )
     }
-  }
+  },
+  getters: {
+    filteredProjects: state => {
+      const nameQuery = state.searchQuery.toLowerCase().trim()
+      const statusQuery = state.selectedStatus
+      if (nameQuery === '' && statusQuery === '') {
+        return state.projects
+      }
+      return state.projects.filter(project =>
+        project.name.toLowerCase().includes(nameQuery) &&
+        (statusQuery === '' || project.status === statusQuery)
+      )
+    },
+  },
 })

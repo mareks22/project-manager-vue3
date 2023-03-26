@@ -39,12 +39,12 @@ const numberOfOverdueProjects = computed(() => {
     return dueDate < new Date()
   }).length
 })
+
 const projectCounter = computed(() => {
   return props.project.filter((project) => project[props.keyObject] === props.valueObject).length
 })
 
 const languageCounter = computed(() => {
-
   const languageCounts: { [key: string]: number } = {}
 props.project.forEach((project) => {
   const language = project[props.keyObject]
@@ -60,7 +60,8 @@ const prominentLanguage =
         (a, b) => (languageCounts[a] > languageCounts[b] ? a : b)
       )
     : ''
-  return languageCounts[prominentLanguage]
+    const result = `${languageCounts[prominentLanguage]} - ${prominentLanguage}`
+  return result
 })
 
 
@@ -75,7 +76,7 @@ const statToShow = computed(() => {
     case 'Overdue':
       return numberOfOverdueProjects
     case 'Prominent':
-      return languageCounter
+      return languageCounter.value
     default :
       return 0
   }

@@ -1,65 +1,16 @@
 <template>
   <div class="analytics">
     <div v-for="(stat, index) in stats" :key="index" class="analytics-group">
-    <ProjectStat
-      class="analytics-group__card"
-      :project="projects"
-      :keyObject="stat.keyObject"
-      :valueObject="stat.valueObject"
-      :title="stat.title"
-      :color="stat.color"
-    >
-    </ProjectStat>
-  </div>
-    <!-- <div class="analytics-group" >
       <ProjectStat
         class="analytics-group__card"
         :project="projects"
-        :keyObject="'status'"
-        :valueObject="'NEW'"
-        title="New"
-        color="#333333"
-      >
-      </ProjectStat>
-      <ProjectStat
-        class="analytics-group__card"
-        :project="projects"
-        :keyObject="'status'"
-        :valueObject="'COMPLETED'"
-        title="Completed"
-        color="#197BBD"
-      >
-      </ProjectStat>
-      <ProjectStat
-        class="analytics-group__card"
-        :project="projects"
-        :keyObject="'status'"
-        :valueObject="'DELIVERED'"
-        title="Delivered"
-        color="#345511"
+        :keyObject="stat.keyObject"
+        :valueObject="stat.valueObject"
+        :title="stat.title"
+        :color="stat.color"
       >
       </ProjectStat>
     </div>
-    <div class="analytics-group">
-      <ProjectStat
-        class="analytics-group__card"
-        :project="projects"
-        title="Overdue"
-        :keyObject="'dateDue'"
-        color="#BC412B"
-      >
-      </ProjectStat>
-    </div>
-    <div class="analytics-group">
-      <ProjectStat
-        class="analytics-group__card"
-        :project="projects"
-        title="Prominent"
-        :keyObject="'sourceLanguage'"
-        color="#274156"
-      >
-      </ProjectStat>
-    </div> -->
   </div>
 </template>
 
@@ -72,36 +23,35 @@ const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
 
 const stats = [
-        {
-          keyObject: 'status',
-          valueObject: 'NEW',
-          title: 'New',
-          color: '#333333',
-        },
-        {
-          keyObject: 'status',
-          valueObject: 'COMPLETED',
-          title: 'Completed',
-          color: '#197BBD',
-        },
-        {
-          keyObject: 'status',
-          valueObject: 'DELIVERED',
-          title: 'Delivered',
-          color: '#345511',
-        },
-        {
-          keyObject: 'dateDue',
-          title: 'Overdue',
-          color: '#BC412B',
-        },
-        {
-          keyObject: 'sourceLanguage',
-          title: 'Prominent',
-          color: '#274156',
-        },
-      ]
-
+  {
+    keyObject: 'status',
+    valueObject: 'NEW',
+    title: 'New',
+    color: '#333333'
+  },
+  {
+    keyObject: 'status',
+    valueObject: 'COMPLETED',
+    title: 'Completed',
+    color: '#197BBD'
+  },
+  {
+    keyObject: 'status',
+    valueObject: 'DELIVERED',
+    title: 'Delivered',
+    color: '#345511'
+  },
+  {
+    keyObject: 'dateDue',
+    title: 'Overdue',
+    color: '#BC412B'
+  },
+  {
+    keyObject: 'sourceLanguage',
+    title: 'Prominent',
+    color: '#274156'
+  }
+]
 </script>
 
 <style lang="scss">

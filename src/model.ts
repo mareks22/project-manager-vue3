@@ -1,7 +1,7 @@
 export interface Project {
   id: string | number
   name: string
-  status: string
+  status: ProjectStatus
   sourceLanguage: string
   dateDue: string
   dateCreated: string
@@ -9,4 +9,10 @@ export interface Project {
   targetLanguages: string[]
     // Add an index signature to allow accessing properties using bracket notation
     [key: string]: any;
+}
+
+export enum ProjectStatus {
+  NEW = 'NEW',
+  COMPLETED = 'COMPLETED',
+  DELIVERED = 'DELIVERED',
 }

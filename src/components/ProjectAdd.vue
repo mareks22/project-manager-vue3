@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project } from '@/model'
+import {ProjectStatus } from '@/model'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -17,21 +18,20 @@ const buttonText = computed(() => {
   return isEditing.value ? 'Edit' : 'Add Project'
 })
 
+const statusOptions = computed(() => [
+  ProjectStatus.NEW,
+  ProjectStatus.COMPLETED,
+  ProjectStatus.DELIVERED
+])
+
+
 const form = ref({
   name: '',
-  status: '',
+  status: ProjectStatus.NEW,
   dateDue: '',
   sourceLanguage: '',
-  targetLanguages: ['']
+  targetLanguages: ''
 })
-
-function formatDate(myDate: string) {
-  const date = new Date(myDate)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
 
 //populate form if in editing mode
 onMounted(() => {
@@ -39,14 +39,14 @@ onMounted(() => {
     form.value.name = projectEditing.name
     form.value.status = projectEditing.status
     form.value.sourceLanguage = projectEditing.sourceLanguage
-    form.value.targetLanguages = projectEditing.targetLanguages
+    form.value.targetLanguages = projectEditing.targetLanguages.join(',')
     form.value.dateDue = formatDate(projectEditing.dateDue)
   }
 })
 
 //submit handler
-
 function createNewProject(): Project {
+  const targetLangArray = form.value.targetLanguages.split(',')
   const newProject = {
     id: Math.random(),
     name: form.value.name,
@@ -54,7 +54,7 @@ function createNewProject(): Project {
     dateDue: new Date(form.value.dateDue).toISOString(),
     dateCreated: new Date().toISOString(),
     sourceLanguage: form.value.sourceLanguage,
-    targetLanguages: [...form.value.targetLanguages, 'ja']
+    targetLanguages: targetLangArray
   }
 
   if (isEditing.value) {
@@ -64,8 +64,17 @@ function createNewProject(): Project {
   }
 }
 
+function formatDate(myDate: string) {
+  const date = new Date(myDate)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 function onSubmit() {
   const newProject = createNewProject()
+  console.log(newProject.targetLanguages)
 
   if (projectEditing) {
     editByIdProject(projectEditing.id, newProject)
@@ -87,23 +96,21 @@ function goBack() {
 <template>
   <div class="wrapper">
     <form ref="form" class="project-form" @submit.prevent="onSubmit()">
-      <label>Name</label><input class="project-form__input" type="text" v-model="form.name" />
+      <label>Name</label><input class="project-form__input input" type="text" v-model="form.name" />
 
       <label>Status</label
-      ><select class="project-form__input" v-model="form.status">
-        <option value="NEW">New</option>
-        <option value="COMPLETED">Completed</option>
-        <option value="DELIVERED">Delivered</option>
+      ><select class="project-form__input input" v-model="form.status">
+        <option v-for="status in statusOptions" :value="status" :key="status">{{status}}</option>
       </select>
 
       <label>Source Language</label
-      ><input class="project-form__input" type="text" v-model="form.sourceLanguage" />
+      ><input class="project-form__input input" type="text" v-model="form.sourceLanguage" />
 
-      <label>Targe Languages</label
-      ><input class="project-form__input" type="text" v-model="form.targetLanguages" />
+      <label>Target Languages</label
+      ><input class="project-form__input input" type="text" v-model="form.targetLanguages" />
 
       <label>Date due:</label
-      ><input class="project-form__input" type="date" v-model="form.dateDue" />
+      ><input class="project-form__input input" type="date" v-model="form.dateDue" />
       <div class="project-form__buttons">
         <button @click="goBack()" class="btn btn-secondary" type="button">Back</button>
         <button class="btn btn-primary" type="submit">{{buttonText}}</button>
@@ -127,12 +134,7 @@ function goBack() {
 
 .project-form {
   &__input {
-    background: #fff;
-    border: 1px solid #a2a2a2;
-    border-radius: 10px;
-    display: block;
     margin-bottom: 15px;
-    padding: 10px 16px;
     width: 100%;
     option {
       min-height: 1.2em;
