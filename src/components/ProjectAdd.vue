@@ -106,7 +106,7 @@ function goBack() {
       <label>Source Language</label
       ><input class="project-form__input input" type="text" v-model="form.sourceLanguage" />
 
-      <label>Target Languages</label
+      <label>Target Languages (comma separated)</label
       ><input class="project-form__input input" type="text" v-model="form.targetLanguages" />
 
       <label>Date due:</label

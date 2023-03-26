@@ -114,46 +114,6 @@ const fullSpan = computed(() => {
 
     <div :style="fullSpan" v-if="filteredProjects.length == 0" class="info">No projects found.</div>
   </div>
-
-  <!-- <table class="projects-table">
-    <tr class="header">
-      <th
-        @click="onFilter(title)"
-        v-for="(title, index) in titleArray"
-        :class="{ filteredBy: isFiltered === title }"
-        :key="index"
-        class="clickable"
-      >
-        {{ title }}
-        <font-awesome-icon
-          v-if="isFiltered === title && title.length > 0"
-          class="clickable icon"
-          :icon="filterIcon"
-        />
-      </th>
-    </tr>
-    <tr v-for="project in projects" :key="project.id">
-      <td>{{ project.id }}</td>
-      <td>{{ project.name }}</td>
-      <td>{{ project.status }}</td>
-      <td>{{ new Date(project.dateDue).toLocaleDateString() }}</td>
-      <td>{{ new Date(project.dateCreated).toLocaleDateString() }}</td>
-      <td style="max-width: 50px;">
-        <font-awesome-icon
-          @click="onEdit(project.id)"
-          class="clickable"
-          icon="fa-solid fa-pen-to-square"
-        />
-      </td>
-      <td>
-        <font-awesome-icon
-          @click="onDelete(project.id)"
-          class="clickable"
-          icon="fa-solid fa-trash"
-        />
-      </td>
-    </tr>
-  </table> -->
   <div class="footer">
     <RouterLink to="/add-project"><button class="btn btn-primary">Add Project</button></RouterLink>
   </div>
@@ -220,37 +180,6 @@ $column-full-span: span 9;
   justify-content: center;
   margin: 24px auto;
 }
-
-// .projects-list {
-//   list-style-type: none;
-// }
-
-// .projects-table {
-//   border-spacing: 0px;
-//   width: 100%;
-
-// }
-
-// th {
-//   background-color: rgb(77, 77, 77);
-//   height: 36px;
-
-// }
-
-// td {
-//   text-align: center;
-//   height: 48px;
-//   background-color: rgb(43, 42, 42);
-// }
-
-// tr:hover td {
-//   background-color: rgb(68, 68, 68);
-// }
-
-// .project-title {
-//   display: flex;
-// }
-
 .clickable {
   cursor: pointer;
   &:hover {
