@@ -104,7 +104,7 @@ function goBack() {
 
 <template>
   <div class="wrapper">
-    <h1>{{buttonText}}</h1>
+    <h1>{{ buttonText }}</h1>
     <form ref="form" class="project-form" @submit.prevent="onSubmit()">
       <label>Name</label>
       <input class="project-form__input input" type="text" v-model="form.name" />
@@ -122,7 +122,7 @@ function goBack() {
 
       <label>Target Languages (comma separated)</label
       ><input class="project-form__input input" type="text" v-model="form.targetLanguages" />
-      <p class="error" v-if="hasError && !form.sourceLanguage">Please enter a target language.</p>
+      <p class="error" v-if="hasError && !form.targetLanguages">Please enter a target language.</p>
 
       <label>Date due:</label
       ><input class="project-form__input input" type="date" v-model="form.dateDue" />

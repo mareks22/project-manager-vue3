@@ -5,17 +5,12 @@ import { computed } from 'vue'
 interface Props {
   project: Project[]
   title: string
-  color: string
   keyObject: string
   valueObject: string
 }
 
 const props: Readonly<Props> = defineProps({
   title: {
-    type: String,
-    required: true
-  },
-  color: {
     type: String,
     required: true
   },
@@ -46,69 +41,85 @@ const projectCounter = computed(() => {
 
 const languageCounter = computed(() => {
   const languageCounts: { [key: string]: number } = {}
-props.project.forEach((project) => {
-  const language = project[props.keyObject]
-  if (languageCounts[language]) {
-    languageCounts[language]++
-  } else {
-    languageCounts[language] = 1
-  }
-})
-const prominentLanguage =
-  Object.keys(languageCounts).length > 0
-    ? Object.keys(languageCounts).reduce(
-        (a, b) => (languageCounts[a] > languageCounts[b] ? a : b)
-      )
-    : ''
-    const result = `${languageCounts[prominentLanguage]} - ${prominentLanguage}`
+  props.project.forEach((project) => {
+    const language = project[props.keyObject]
+    if (languageCounts[language]) {
+      languageCounts[language]++
+    } else {
+      languageCounts[language] = 1
+    }
+  })
+
+  const prominentLanguage =
+    Object.keys(languageCounts).length > 0
+      ? Object.keys(languageCounts).reduce((a, b) =>
+          languageCounts[a] > languageCounts[b] ? a : b
+        )
+      : ''
+  const result = ` ${prominentLanguage} - ${languageCounts[prominentLanguage]}`
   return result
 })
 
-
-const statToShow = computed(() => {
-  switch(props.title){
-    case 'New' :
-      return projectCounter
+const cardInfo = computed<{ stat: string; icon: string }>(() => {
+  switch (props.title) {
+    case 'New':
+      return { stat: projectCounter.value.toString(), icon: 'fa-solid fa-circle-plus' }
     case 'Completed':
-      return projectCounter
+      return { stat: projectCounter.value.toString(), icon: 'fa-solid fa-circle-check' }
     case 'Delivered':
-      return projectCounter
+      return { stat: projectCounter.value.toString(), icon: 'fa-solid fa-paper-plane' }
     case 'Overdue':
-      return numberOfOverdueProjects
+      return { stat: numberOfOverdueProjects.value.toString(), icon: 'fa-solid fa-clock' }
     case 'Prominent':
-      return languageCounter.value
-    default :
-      return 0
+      return { stat: languageCounter.value, icon: 'fa-solid fa-box-archive' }
+    default:
+      return { stat: '', icon: '' }
   }
 })
 </script>
 
 <template>
-  <div class="stat-card" :style="{ 'background-color': props.color }">
-    <h2 class="stat-card__title">{{ props.title }}</h2>
-    <span class="stat-card__value">{{ statToShow }}</span>
+  <div class="stat-card">
+    <div class="text">
+      <span class="stat-card__value">{{ cardInfo.stat }}</span>
+      <h2 class="stat-card__title">{{ props.title }}</h2>
+    </div>
+    <font-awesome-icon class="icon" :icon="cardInfo.icon" size="2xl" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .stat-card {
-  background-color: blueviolet;
+  background-color: #fff;
   width: 100%;
-  height: 120px;
+  height: 100px;
   text-align: left;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   min-width: 190px;
   box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
+  padding: 10px;
 
   &__title {
-    margin-left: 12px;
+    font-size: 1rem;
+    align-self: center;
+    line-height: 1rem;
+    padding-top: 10px;
   }
 
   &__value {
-    margin-left: 12px;
-    font-size: 2.5rem;
+    font-size: 2.25rem;
+    line-height: 2rem;
   }
+}
+.icon {
+  margin: 20px;
+  align-self: center;
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
 }
 </style>

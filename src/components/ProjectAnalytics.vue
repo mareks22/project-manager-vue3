@@ -7,7 +7,6 @@
         :keyObject="stat.keyObject"
         :valueObject="stat.valueObject"
         :title="stat.title"
-        :color="'#fff'"
       >
       </ProjectStat>
     </div>
@@ -26,30 +25,25 @@ const stats = [
   {
     keyObject: 'status',
     valueObject: 'NEW',
-    title: 'New',
-    color: '#333333'
+    title: 'New'
   },
   {
     keyObject: 'status',
     valueObject: 'COMPLETED',
-    title: 'Completed',
-    color: '#197BBD'
+    title: 'Completed'
   },
   {
     keyObject: 'status',
     valueObject: 'DELIVERED',
-    title: 'Delivered',
-    color: '#345511'
+    title: 'Delivered'
   },
   {
     keyObject: 'dateDue',
-    title: 'Overdue',
-    color: '#BC412B'
+    title: 'Overdue'
   },
   {
     keyObject: 'sourceLanguage',
-    title: 'Prominent',
-    color: '#274156'
+    title: 'Prominent'
   }
 ]
 </script>
@@ -79,6 +73,4 @@ $border-radius: 10px;
     }
   }
 }
-
-
 </style>

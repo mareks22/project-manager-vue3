@@ -9,7 +9,7 @@ export const useProjectStore = defineStore('projects', {
   state: () => ({
     projects: [] as Project[],
     searchQuery: '',
-    selectedStatus: '' as ProjectStatus | '',
+    selectedStatus: '' as ProjectStatus | ''
   }),
   actions: {
     getProjects() {
@@ -50,16 +50,17 @@ export const useProjectStore = defineStore('projects', {
     }
   },
   getters: {
-    filteredProjects: state => {
+    filteredProjects: (state) => {
       const nameQuery = state.searchQuery.toLowerCase().trim()
       const statusQuery = state.selectedStatus
       if (nameQuery === '' && statusQuery === '') {
         return state.projects
       }
-      return state.projects.filter(project =>
-        project.name.toLowerCase().includes(nameQuery) &&
-        (statusQuery === '' || project.status === statusQuery)
+      return state.projects.filter(
+        (project) =>
+          project.name.toLowerCase().includes(nameQuery) &&
+          (statusQuery === '' || project.status === statusQuery)
       )
-    },
-  },
+    }
+  }
 })

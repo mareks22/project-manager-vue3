@@ -71,7 +71,7 @@ function resetFilter() {
 
   &__icon {
     align-self: center;
-    margin-right: 15px;
+    margin-right: 25px;
   }
 
   &__input {
