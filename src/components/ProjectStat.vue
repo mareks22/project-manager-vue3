@@ -100,6 +100,7 @@ const statToShow = computed(() => {
   flex-direction: column;
   justify-content: center;
   min-width: 190px;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
 
   &__title {
     margin-left: 12px;

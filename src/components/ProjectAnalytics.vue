@@ -7,7 +7,7 @@
         :keyObject="stat.keyObject"
         :valueObject="stat.valueObject"
         :title="stat.title"
-        :color="stat.color"
+        :color="'#fff'"
       >
       </ProjectStat>
     </div>
@@ -59,7 +59,7 @@ $border-radius: 10px;
 
 .analytics {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 24px;
 
@@ -67,6 +67,7 @@ $border-radius: 10px;
     display: flex;
 
     &__card {
+      margin-bottom: 24px;
       &:first-child {
         border-top-left-radius: $border-radius;
         border-bottom-left-radius: $border-radius;
@@ -78,4 +79,6 @@ $border-radius: 10px;
     }
   }
 }
+
+
 </style>

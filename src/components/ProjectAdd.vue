@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Project } from '@/model'
-import {ProjectStatus } from '@/model'
+import { ProjectStatus } from '@/model'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -24,6 +24,7 @@ const statusOptions = computed(() => [
   ProjectStatus.DELIVERED
 ])
 
+const hasError = ref(false)
 
 const form = ref({
   name: '',
@@ -73,16 +74,24 @@ function formatDate(myDate: string) {
 }
 
 function onSubmit() {
-  const newProject = createNewProject()
-  console.log(newProject.targetLanguages)
+  hasError.value = false
 
-  if (projectEditing) {
-    editByIdProject(projectEditing.id, newProject)
+  if (
+    !form.value.name ||
+    !form.value.sourceLanguage ||
+    !form.value.targetLanguages ||
+    !form.value.dateDue
+  ) {
+    hasError.value = true
   } else {
-    addNewProject(newProject)
+    const newProject = createNewProject()
+    if (projectEditing) {
+      editByIdProject(projectEditing.id, newProject)
+    } else {
+      addNewProject(newProject)
+    }
+    goBack()
   }
-
-  goBack()
 }
 
 //navigation back
@@ -95,25 +104,32 @@ function goBack() {
 
 <template>
   <div class="wrapper">
+    <h1>{{buttonText}}</h1>
     <form ref="form" class="project-form" @submit.prevent="onSubmit()">
-      <label>Name</label><input class="project-form__input input" type="text" v-model="form.name" />
+      <label>Name</label>
+      <input class="project-form__input input" type="text" v-model="form.name" />
+      <p class="error" v-if="hasError && !form.name">Please enter a name.</p>
 
       <label>Status</label
       ><select class="project-form__input input" v-model="form.status">
-        <option v-for="status in statusOptions" :value="status" :key="status">{{status}}</option>
+        <option v-for="status in statusOptions" :value="status" :key="status">{{ status }}</option>
       </select>
+      <p class="error" v-if="hasError && !form.status">Please enter a status.</p>
 
       <label>Source Language</label
       ><input class="project-form__input input" type="text" v-model="form.sourceLanguage" />
+      <p class="error" v-if="hasError && !form.sourceLanguage">Please enter a source language.</p>
 
       <label>Target Languages (comma separated)</label
       ><input class="project-form__input input" type="text" v-model="form.targetLanguages" />
+      <p class="error" v-if="hasError && !form.sourceLanguage">Please enter a target language.</p>
 
       <label>Date due:</label
       ><input class="project-form__input input" type="date" v-model="form.dateDue" />
+      <p class="error" v-if="hasError && !form.dateDue">Please enter a due date.</p>
       <div class="project-form__buttons">
         <button @click="goBack()" class="btn btn-secondary" type="button">Back</button>
-        <button class="btn btn-primary" type="submit">{{buttonText}}</button>
+        <button class="btn btn-primary" type="submit">{{ buttonText }}</button>
       </div>
     </form>
   </div>
@@ -127,15 +143,15 @@ function goBack() {
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  background-color: rgb(43, 42, 42);
+  background-color: #fff;
   border-radius: 24px;
   padding: 24px;
 }
 
 .project-form {
   &__input {
-    margin-bottom: 15px;
     width: 100%;
+
     option {
       min-height: 1.2em;
       padding: 0px 2px 1px;
@@ -144,12 +160,26 @@ function goBack() {
 }
 
 .project-form__buttons {
+  display: flex;
+  justify-content: space-around;
   .btn {
-    margin: 10px;
+    margin: 16px 10px;
   }
 }
 
 label {
+  padding-top: 15px;
+  display: inline-block;
   text-align: left;
+}
+
+h1 {
+  font-weight: 600;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
 }
 </style>

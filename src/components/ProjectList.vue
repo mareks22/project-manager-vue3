@@ -62,7 +62,17 @@ function onSort(filterBy: string) {
   }
 }
 
-const titleArray = ['ID', 'Name', 'Status', 'Source Language', 'Target Language', 'Date due', 'Created', '', '']
+const titleArray = [
+  'ID',
+  'Name',
+  'Status',
+  'Source Language',
+  'Target Language',
+  'Date due',
+  'Created',
+  '',
+  ''
+]
 const fullSpan = computed(() => {
   return `grid-column: span ${titleArray.length}`
 })
@@ -78,9 +88,9 @@ const fullSpan = computed(() => {
       v-for="(title, index) in titleArray"
       :class="{ filteredBy: isFiltered === title }"
       :key="index"
-      class="grid-container__header clickable"
+      class="grid-container__header"
     >
-      {{ title }}
+      <span class="clickable">{{ title }}</span>
       <font-awesome-icon
         v-if="isFiltered === title && title.length > 0"
         class="clickable icon"
@@ -120,9 +130,10 @@ const fullSpan = computed(() => {
 </template>
 
 <style scoped lang="scss">
-
 $column-full-span: span 9;
 .grid-container {
+  $header-bg-color: rgb(241, 241, 241);
+
   display: grid;
   grid-template-columns: minmax(75px, auto) repeat(6, 1fr) minmax(50px, auto) minmax(50px, auto);
   grid-auto-rows: minmax(40px, auto);
@@ -135,9 +146,10 @@ $column-full-span: span 9;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(77, 77, 77);
+    background-color: $header-bg-color;
     height: 100%;
     user-select: none;
+
   }
 
   &__filters {
@@ -145,8 +157,9 @@ $column-full-span: span 9;
     display: flex;
     justify-content: flex-end;
     height: 60px;
-    background-color: rgb(77, 77, 77);
+    background-color: $header-bg-color;
   }
+
 }
 
 .footer {
@@ -161,8 +174,12 @@ $column-full-span: span 9;
   align-items: center;
   width: 100%;
   height: 48px;
-  background-color: rgb(43, 42, 42);
+  background-color: #fff;
   text-align: center;
+
+  @media (max-width: 768px) {
+    height: 36px;
+  }
 }
 
 .wrapper {
@@ -170,25 +187,26 @@ $column-full-span: span 9;
 }
 
 .wrapper:hover > div {
-  background-color: rgb(49, 49, 49);
+  background-color: #f5f5f5;
 }
 
 .info {
-  font-size:24px;
+  font-size: 24px;
   text-align: center;
   display: flex;
   justify-content: center;
   margin: 24px auto;
 }
 .clickable {
+  font-weight: 600;
   cursor: pointer;
   &:hover {
-    color: #fff;
+    color: #000000;
   }
 }
 
 .filteredBy {
-  color: #fff;
+  color: #3a3a3a;
   font-weight: bold;
 }
 

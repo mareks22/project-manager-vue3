@@ -66,7 +66,6 @@ function resetFilter() {
 
 .filters {
   display: flex;
-  background-color: rgb(77, 77, 77);
   width: 100%;
   justify-content: end;
 
