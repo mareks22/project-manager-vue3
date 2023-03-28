@@ -77,7 +77,7 @@ const fullSpan = computed(() => {
 
 //modal handling
 const showModal = ref(false)
-const message = ref(`Are you sure to delete: `)
+const message = ref(`Are you sure you want to delete: `)
 const modalProps = ref('')
 
 const onDelete = (name: string, id: string) => {
@@ -138,11 +138,6 @@ const onCancel = () => {
           />
         </div>
         <div class="grid-container__item">
-          <!-- <font-awesome-icon
-            @click="onDelete(project.id)"
-            class="clickable"
-            icon="fa-solid fa-trash"
-          /> -->
           <font-awesome-icon
             @click="onDelete(project.name, project.id.toString())"
             class="clickable"
