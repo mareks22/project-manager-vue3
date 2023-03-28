@@ -1,18 +1,3 @@
-<template>
-  <div class="analytics">
-    <div v-for="(stat, index) in stats" :key="index" class="analytics-group">
-      <ProjectStat
-        class="analytics-group__card"
-        :project="projects"
-        :keyObject="stat.keyObject"
-        :valueObject="stat.valueObject"
-        :title="stat.title"
-      >
-      </ProjectStat>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import ProjectStat from './ProjectStat.vue'
 import { useProjectStore } from '@/store/projects'
@@ -47,6 +32,21 @@ const stats = [
   }
 ]
 </script>
+
+<template>
+  <div class="analytics">
+    <div v-for="(stat, index) in stats" :key="index" class="analytics-group">
+      <ProjectStat
+        class="analytics-group__card"
+        :project="projects"
+        :keyObject="stat.keyObject"
+        :valueObject="stat.valueObject"
+        :title="stat.title"
+      >
+      </ProjectStat>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 $border-radius: 10px;

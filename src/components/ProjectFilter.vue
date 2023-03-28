@@ -1,4 +1,4 @@
-127<script setup lang="ts">
+<script setup lang="ts">
 import { useProjectStore } from '@/store/projects'
 import { computed } from 'vue'
 import { ProjectStatus } from '@/model'

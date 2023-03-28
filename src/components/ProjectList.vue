@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/projects'
 import { useRouter } from 'vue-router'
+import ConfirmModal from './ui/ConfirmModal.vue'
 import ProjectFilter from './ProjectFilter.vue'
 
 const router = useRouter()
@@ -31,9 +32,6 @@ const filterIcon = computed<string>(() =>
 
 function onEdit(id: string | number) {
   router.push(`/add-project/${id}`)
-}
-function onDelete(id: string | number) {
-  removeProject(id)
 }
 
 function onSort(filterBy: string) {
@@ -76,6 +74,25 @@ const titleArray = [
 const fullSpan = computed(() => {
   return `grid-column: span ${titleArray.length}`
 })
+
+//modal handling
+const showModal = ref(false)
+const message = ref(`Are you sure to delete: `)
+const modalProps = ref('')
+
+const onDelete = (name: string, id: string) => {
+  showModal.value = true
+  message.value = message.value + name
+  modalProps.value = id
+}
+
+const onConfirm = (id: string) => {
+  removeProject(id)
+}
+
+const onCancel = () => {
+  showModal.value = false
+}
 </script>
 
 <template>
@@ -121,8 +138,13 @@ const fullSpan = computed(() => {
           />
         </div>
         <div class="grid-container__item">
-          <font-awesome-icon
+          <!-- <font-awesome-icon
             @click="onDelete(project.id)"
+            class="clickable"
+            icon="fa-solid fa-trash"
+          /> -->
+          <font-awesome-icon
+            @click="onDelete(project.name, project.id.toString())"
             class="clickable"
             icon="fa-solid fa-trash"
           />
@@ -137,6 +159,13 @@ const fullSpan = computed(() => {
   <div class="footer">
     <RouterLink to="/add-project"><button class="btn btn-primary">Add Project</button></RouterLink>
   </div>
+  <ConfirmModal
+    v-if="showModal"
+    :message="message"
+    :modalProps="modalProps"
+    @confirm="onConfirm"
+    @cancel="onCancel"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -162,7 +191,6 @@ $column-full-span: span 9;
     height: 100%;
     @include flex-center;
     background-color: $header-bg-color;
-
   }
 
   &__filters {
