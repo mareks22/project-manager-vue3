@@ -15,11 +15,13 @@ import {
   faCirclePlus,
   faCircleCheck,
   faBoxArchive,
-  faClock
+  faClock,
+  faEarthEurope
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import './assets/main.scss'
+import i18n from './i18n'
 
 const app = createApp(App)
 
@@ -35,7 +37,9 @@ library.add(
   faFilter,
   faXmark,
   faBoxArchive,
-  faClock
+  faClock,
+  faEarthEurope
 )
+app.use(i18n)
 app.use(router).use(pinia).component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { supabase } from '../lib/supabase'
 
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/projects'
@@ -22,8 +23,13 @@ const {
   sortProjectsByDate
 } = useProjectStore()
 
+const fetchData = async () => {
+  await getProjects()
+  sortProjectsByNumber('id', reverseSort.value)
+}
+
 onMounted(() => {
-  getProjects()
+  fetchData()
 })
 
 const filterIcon = computed<string>(() =>
@@ -38,36 +44,38 @@ function onSort(filterBy: string) {
   isFiltered.value = filterBy
   reverseSort.value = !reverseSort.value
 
-  switch (filterBy) {
-    case 'Name':
-      sortProjectsByString('name', reverseSort.value)
-      break
-    case 'ID':
-      sortProjectsByNumber('id', reverseSort.value)
-      break
-    case 'Status':
-      sortProjectsByString('status', reverseSort.value)
-      break
-    case 'Due Date':
-      sortProjectsByDate('dateDue', reverseSort.value)
-      break
-    case 'Source Language':
-      sortProjectsByString('sourceLanguage', reverseSort.value)
-      break
-    case 'Created':
-      sortProjectsByDate('dateCreated', reverseSort.value)
-      break
-  }
+  sortProjectsByString(filterBy, reverseSort.value)
+
+  // switch (filterBy) {
+  //   case 'Name':
+  //     sortProjectsByString('name', reverseSort.value)
+  //     break
+  //   case 'ID':
+  //     sortProjectsByNumber('id', reverseSort.value)
+  //     break
+  //   case 'Status':
+  //     sortProjectsByString('status', reverseSort.value)
+  //     break
+  //   case 'Due Date':
+  //     sortProjectsByDate('dateDue', reverseSort.value)
+  //     break
+  //   case 'Source Language':
+  //     sortProjectsByString('sourceLanguage', reverseSort.value)
+  //     break
+  //   case 'Created':
+  //     sortProjectsByDate('dateCreated', reverseSort.value)
+  //     break
+  // }
 }
 
 const titleArray = [
-  'ID',
-  'Name',
-  'Status',
-  'Source Language',
-  'Target Language',
-  'Due Date',
-  'Created',
+  'id',
+  'name',
+  'status',
+  'sourceLanguage',
+  'targetLanguage',
+  'dateDue',
+  'dateCreated',
   '',
   ''
 ]
@@ -86,7 +94,7 @@ const onDelete = (name: string, id: string) => {
   modalProps.value = id
 }
 
-const onConfirm = (id: string) => {
+const onConfirm = (id: number) => {
   removeProject(id)
 }
 
@@ -108,7 +116,7 @@ const onCancel = () => {
         :key="index"
         class="grid-container__header"
       >
-        <span class="clickable">{{ title }}</span>
+        <span class="clickable">{{ $t(title) }}</span>
         <font-awesome-icon
           v-if="isFiltered === title && title.length > 0"
           class="clickable icon"
@@ -152,7 +160,9 @@ const onCancel = () => {
     </div>
   </div>
   <div class="footer">
-    <RouterLink to="/add-project"><button class="btn btn-primary">Add Project</button></RouterLink>
+    <RouterLink to="/add-project"
+      ><button class="btn btn-primary">{{ $t('addProject') }}</button></RouterLink
+    >
   </div>
   <ConfirmModal
     v-if="showModal"
@@ -224,6 +234,7 @@ $column-full-span: span 9;
   display: flex;
   width: 100%;
   justify-content: end;
+  padding: 0 2rem;
 }
 
 .wrapper {
@@ -233,6 +244,7 @@ $column-full-span: span 9;
 .grid-wrapper {
   width: 100%;
   overflow-x: auto;
+  padding: 2rem;
 }
 
 .grid-wrapper::-webkit-scrollbar {

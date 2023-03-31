@@ -37,7 +37,7 @@ function resetFilter() {
       v-model="searchQuery"
       class="filters__input input"
       type="text"
-      placeholder="Search name"
+      :placeholder="$t('searchName')"
     />
     <font-awesome-icon
     v-if="projectStore.searchQuery"
@@ -48,7 +48,7 @@ function resetFilter() {
     />
     <select name="status filter" id="filter" v-model="selectedStatus" class="filters__input input">
       <option value="null" disabled selected>Select status</option>
-      <option value="">ALL</option>
+      <option value="">{{$t('all').toUpperCase()}}</option>
       <option v-for="status in statusOptions" :value="status" :key="status">{{ status }}</option>
     </select>
   </div>

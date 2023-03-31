@@ -55,8 +55,7 @@ $border-radius: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 24px;
-
+padding: 2rem;
   &-group {
     display: flex;
 
