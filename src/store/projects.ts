@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 
-import { useHttpService } from '@/service/httpService'
+//import { useHttpService } from '@/service/httpService'
 import type { Project, ProjectStatus } from '@/model'
+import { supabase } from '@/lib/supabase'
 
-const { fetchProjects, deleteProject, addProject, editProject } = useHttpService()
+//const { fetchProjects, deleteProject, addProject, editProject } = useHttpService()
 
 export const useProjectStore = defineStore('projects', {
   state: () => ({
@@ -12,23 +13,47 @@ export const useProjectStore = defineStore('projects', {
     selectedStatus: '' as ProjectStatus | ''
   }),
   actions: {
-    getProjects() {
-      fetchProjects().then((res) =>
-        res.json().then((response) => {
-          this.projects = response._embedded.projects
-        })
-      )
+    async getProjects() {
+      const { data, error } = await supabase.from('projects').select('*')
+      if (data !== null) {
+        this.projects = data
+      }
+
+      if (error) {
+        console.error(error)
+      }
     },
-    removeProject(id: string | number) {
-      deleteProject(id).then(() => this.getProjects())
+    async removeProject(id: number) {
+      const { error } = await supabase.from('projects').delete().eq('id', id)
+      if (error) {
+        console.error(error)
+      }
+      this.getProjects()
     },
 
-    addNewProject(payload: Project) {
-      addProject(payload).then(() => this.getProjects())
+    async addNewProject(payload: Project) {
+      const { error } = await supabase.from('projects').insert({ ...payload })
+      if (error) {
+        console.error(error)
+      }
+      this.getProjects()
     },
 
-    editByIdProject(id: number | string, payload: Project) {
-      editProject(id, payload).then(() => this.getProjects())
+    // addNewProject(payload: Project) {
+    //   addProject(payload).then(() => this.getProjects())
+    // },
+
+    async editByIdProject(id: number, payload: Project) {
+      const { error } = await supabase
+        .from('projects')
+        .update({ ...payload })
+        .eq('id', id)
+
+      if (error) {
+        console.error(error)
+      }
+      this.getProjects()
+      //editProject(id, payload).then(() => this.getProjects())
     },
 
     sortProjectsByString(key: string, reverse: boolean) {

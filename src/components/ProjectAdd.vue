@@ -5,6 +5,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useProjectStore } from '@/store/projects'
+import { supabase } from '@/lib/supabase'
 
 const { addNewProject, projects, editByIdProject } = useProjectStore()
 
@@ -26,6 +27,17 @@ const statusOptions = computed(() => [
 
 const hasError = ref(false)
 
+const ids = ref<number[]>([])
+async function getIds() {
+
+  let { data, error } = await supabase
+  .from('projects')
+  .select('id')
+  if(data) {
+    ids.value = data.map(obj => obj.id)
+  }
+}
+  
 const form = ref({
   name: '',
   status: ProjectStatus.NEW,
@@ -36,6 +48,7 @@ const form = ref({
 
 //populate form if in editing mode
 onMounted(() => {
+  getIds()
   if (projectEditing) {
     form.value.name = projectEditing.name
     form.value.status = projectEditing.status
@@ -49,7 +62,7 @@ onMounted(() => {
 function createNewProject(): Project {
   const targetLangArray = form.value.targetLanguages.split(',')
   const newProject = {
-    id: Math.random(),
+    id: Math.max(...ids.value)+1,
     name: form.value.name,
     status: form.value.status,
     dateDue: new Date(form.value.dateDue).toISOString(),
@@ -61,7 +74,7 @@ function createNewProject(): Project {
   if (isEditing.value) {
     return { ...newProject, dateUpdated: new Date().toISOString() }
   } else {
-    return { ...newProject, dateCreated: new Date().toISOString() }
+    return { ...newProject, dateUpdated: null, dateCreated: new Date().toISOString() }
   }
 }
 
@@ -140,12 +153,13 @@ function goBack() {
   display: flex;
   flex-direction: column;
   max-width: 960px;
-  margin: 0 auto;
+  margin: 2rem auto;
   justify-content: center;
   align-items: center;
   background-color: #fff;
   border-radius: 24px;
-  padding: 24px;
+
+
 }
 
 .project-form {

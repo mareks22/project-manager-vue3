@@ -1,11 +1,11 @@
 export interface Project {
-  id: string | number
+  id: number
   name: string
   status: ProjectStatus
   sourceLanguage: string
   dateDue: string
   dateCreated: string
-  dateUpdated?: string
+  dateUpdated: string | null
   targetLanguages: string[]
   // Added an index signature to allow accessing properties using bracket notation
   [key: string]: any
