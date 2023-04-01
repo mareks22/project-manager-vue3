@@ -85,13 +85,13 @@ const fullSpan = computed(() => {
 
 //modal handling
 const showModal = ref(false)
-const message = ref(`Are you sure you want to delete: `)
-const modalProps = ref('')
+const message = ref(`sureToDelete`)
+const modalProps = ref({})
 
 const onDelete = (name: string, id: string) => {
   showModal.value = true
-  message.value = message.value + name
-  modalProps.value = id
+  message.value = `sureToDelete`
+  modalProps.value = {id: id, name:name}
 }
 
 const onConfirm = (id: number) => {
@@ -129,7 +129,7 @@ const onCancel = () => {
         <div class="grid-container__item">{{ project.name }}</div>
         <div class="grid-container__item">
           <span :class="['grid-container__item-status', project.status.toLowerCase()]">
-            {{ project.status }}</span
+            {{ $t(project.status).toUpperCase() }}</span
           >
         </div>
         <div class="grid-container__item">{{ project.sourceLanguage }}</div>

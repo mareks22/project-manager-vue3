@@ -3,14 +3,14 @@
     <div class="modal-overlay" @click.self="onCancel"></div>
     <div class="modal-container">
       <div class="modal-header">
-        <h3>{{ props.title }}</h3>
+        <h3>{{ $t(props.title) }}</h3>
       </div>
       <div class="modal-body">
-        <p>{{ props.message }}</p>
+        <p>{{ $t(props.message, {name: props.modalProps.name} )}}</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" @click="onCancel">Cancel</button>
-        <button class="btn btn-primary" @click="onConfirm">Confirm</button>
+        <button class="btn btn-secondary" @click="onCancel">{{$t('cancel')}}</button>
+        <button class="btn btn-primary" @click="onConfirm">{{$t('confirm')}}</button>
       </div>
     </div>
   </div>
@@ -22,16 +22,16 @@ import { ref, defineEmits } from 'vue'
 interface Props {
   title: string
   message: string
-  modalProps: string | number | boolean
+  modalProps: {[key: string]: unknown}
 }
 
 const props: Readonly<Props> = defineProps({
   title: {
     type: String,
-    default: 'Confirmation'
+    default: 'confirm'
   },
   modalProps: {
-    default: ''
+    default:  () => ({})
   },
   message: {
     type: String,
@@ -44,12 +44,11 @@ const emits = defineEmits(['confirm', 'cancel'])
 const showModal = ref(true)
 
 const onConfirm = () => {
-  emits('confirm', props.modalProps)
+  emits('confirm', props.modalProps.id)
   showModal.value = false
 }
 
 const onCancel = () => {
-    console.log('clicked')
   emits('cancel')
   showModal.value = false
 }

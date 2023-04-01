@@ -16,7 +16,7 @@ const isEditing = computed(() => {
   return !!projectEditing
 })
 const buttonText = computed(() => {
-  return isEditing.value ? 'Edit' : 'Add Project'
+  return isEditing.value ? 'edit' : 'addProject'
 })
 
 const statusOptions = computed(() => [
@@ -117,32 +117,32 @@ function goBack() {
 
 <template>
   <div class="wrapper">
-    <h1>{{ buttonText }}</h1>
+    <h1>{{ $t(buttonText) }}</h1>
     <form ref="form" class="project-form" @submit.prevent="onSubmit()">
-      <label>Name</label>
+      <label>{{$t('name')}}</label>
       <input class="project-form__input input" type="text" v-model="form.name" />
       <p class="error" v-if="hasError && !form.name">Please enter a name.</p>
 
-      <label>Status</label
+      <label>{{$t('status')}}</label
       ><select class="project-form__input input" v-model="form.status">
         <option v-for="status in statusOptions" :value="status" :key="status">{{ status }}</option>
       </select>
       <p class="error" v-if="hasError && !form.status">Please enter a status.</p>
 
-      <label>Source Language</label
+      <label>{{$t('sourceLanguage')}}</label
       ><input class="project-form__input input" type="text" v-model="form.sourceLanguage" />
       <p class="error" v-if="hasError && !form.sourceLanguage">Please enter a source language.</p>
 
-      <label>Target Languages (comma separated)</label
+      <label>{{$t('targetLanguage')}} {{$t('commaSeparated')}}</label
       ><input class="project-form__input input" type="text" v-model="form.targetLanguages" />
       <p class="error" v-if="hasError && !form.targetLanguages">Please enter a target language.</p>
 
-      <label>Date due:</label
+      <label>{{$t('dateDue')}}</label
       ><input class="project-form__input input" type="date" v-model="form.dateDue" />
       <p class="error" v-if="hasError && !form.dateDue">Please enter a due date.</p>
       <div class="project-form__buttons">
-        <button @click="goBack()" class="btn btn-secondary" type="button">Back</button>
-        <button class="btn btn-primary" type="submit">{{ buttonText }}</button>
+        <button @click="goBack()" class="btn btn-secondary" type="button">{{$t('back')}}</button>
+        <button class="btn btn-primary" type="submit">{{ $t(buttonText) }}</button>
       </div>
     </form>
   </div>

@@ -20,7 +20,7 @@ onUnmounted(() => {
 
 let { locale } = useI18n({ useScope: 'global' })
 
-const colorOptions = ['EN', 'IT', 'DE']
+const colorOptions = ['EN', 'IT']
 const showSelect = ref(false)
 const onLanguage = (option: string) => {
 
