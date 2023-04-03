@@ -5,6 +5,8 @@
 - Add project
 - Edit Project
 - Delete Project
+- Filter by name and status
+- Sort by ID, status, name, dates
 
 Database used: Supabase
 
