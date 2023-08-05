@@ -19,3 +19,6 @@ Library: Vue i18n
 ## Other:
 - Vue Router
 - Pinia state management
+
+
+## Live on: [https://project-manager-translations.netlify.app/](https://project-manager-translations.netlify.app/)
