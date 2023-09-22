@@ -12,7 +12,7 @@ export interface Project {
 }
 
 export enum ProjectStatus {
-  NEW = 'new',
-  COMPLETED = 'completed',
-  DELIVERED = 'delivered'
+  NEW = 'NEW',
+  COMPLETED = 'COMPLETED',
+  DELIVERED = 'DELIVERED'
 }
